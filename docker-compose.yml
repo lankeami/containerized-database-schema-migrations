@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  db:
+    image: "postgres:9.6.3"
+    ports:
+      - '5432:5432'
+    environment:
+      - DEBUG=false
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=cfm
+    volumes:
+      - 'db-flyway-data:/var/lib/postgresql'
+
+  flyway-info:
+    build: .
+    command: -url=jdbc:postgresql://db:5432/cfm -user=docker -password=docker info
+    depends_on:
+      - db
+
+  flyway-migrate:
+    build: .
+    command: -url=jdbc:postgresql://db:5432/cfm -user=docker -password=docker migrate
+    depends_on:
+      - db
+      - flyway-info
+    volumes:
+      - './migrations:/flyway/sql'
+
+volumes:
+  db-flyway-data:
+

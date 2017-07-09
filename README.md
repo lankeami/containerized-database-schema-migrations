@@ -14,4 +14,23 @@ Containers are awesome! You can run them anywhere. That means developers can run
 [FlywayDB](https://flywaydb.org/) is a Java application that will maintain the versioning of your database. All you need to do is provide it a directory of your changes, and name your sql files appropriately. Flyway will handle the rest.
 
 ## How do I run this demo?
-
+1. Start the postgres database container
+    ```
+    docker-compose up -d db
+    ```
+1. Once confirmed it's running, check the migration status
+    ```
+    docker-compose run --rm flyway-info
+    ```
+1. Run an actual migration
+    ```
+    docker-compose run --rm flyway-migrate
+    ```
+1. Check to see the migration is listed in the Flyway info call
+    ```
+    docker-compose run --rm flyway-info
+    ```
+1. Cleanup
+    ```
+    docker-compose stop; docker-compose down --volumes
+    ```
